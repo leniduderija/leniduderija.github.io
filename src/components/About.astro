@@ -1,0 +1,93 @@
+---
+import { profile } from '../data/profile';
+import { education } from '../data/experience';
+---
+
+<section id="about" class="section">
+  <div class="container grid">
+    <div>
+      <p class="eyebrow">01 — About</p>
+      <h2 class="section-title">About me</h2>
+    </div>
+    <div class="body">
+      {profile.about.map((p) => <p class="lead">{p}</p>)}
+      <div class="facts">
+        <div>
+          <h3>Education</h3>
+          {
+            education.map((e) => (
+              <p>
+                {e.degree}
+                <span>
+                  {e.school}, {e.start}–{e.end}
+                </span>
+              </p>
+            ))
+          }
+        </div>
+        <div>
+          <h3>Languages</h3>
+          {
+            profile.languages.map((l) => (
+              <p>
+                {l.name} <span>{l.level}</span>
+              </p>
+            ))
+          }
+        </div>
+        <div>
+          <h3>Outside of work</h3>
+          {profile.interests.map((i) => <p>{i}</p>)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 32px clamp(32px, 6vw, 96px);
+  }
+  .lead {
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+  .lead + .lead {
+    margin-top: 20px;
+    color: var(--muted);
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    margin-top: clamp(40px, 5vw, 64px);
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  h3 {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .facts p {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+  .facts span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

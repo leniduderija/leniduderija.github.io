@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Monthly rebuild keeps durations and "years of experience" current.
+  schedule:
+    - cron: '0 6 1 * *'
 
 permissions:
   contents: read

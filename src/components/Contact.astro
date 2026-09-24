@@ -1,50 +1,74 @@
 ---
 import { profile } from '../data/profile';
 
-const { email, github, linkedin } = profile.contact;
-const links = [
-  { label: 'Email', value: email, href: `mailto:${email}` },
-  { label: 'GitHub', value: github.replace('https://', ''), href: github },
-  { label: 'LinkedIn', value: linkedin.replace('https://www.', ''), href: linkedin },
-];
+const { email, linkedin } = profile.contact;
 ---
 
-<section id="contact">
-  <h2>Contact</h2>
-  <p class="lead">Open to new opportunities and interesting conversations. The best way to reach me is email.</p>
-  <ul>
-    {
-      links.map((l) => (
-        <li>
-          <span>{l.label}</span>
-          <a href={l.href} rel="noopener" target={l.href.startsWith('http') ? '_blank' : undefined}>
-            {l.value}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
+<section id="contact" class="contact">
+  <div class="container">
+    <p class="eyebrow">04 — Contact</p>
+    <h2>Let’s build something<br />together.</h2>
+    <p class="lead">Open to new opportunities and interesting conversations. The best way to reach me is email.</p>
+    <a class="email" href={`mailto:${email}`}>{email} <span aria-hidden="true">→</span></a>
+    <ul class="links">
+      <li><a href={linkedin} target="_blank" rel="noopener">LinkedIn ↗</a></li>
+      <li><a href={profile.cvUrl} download>Download CV ↓</a></li>
+    </ul>
+  </div>
 </section>
 
 <style>
+  .contact {
+    background: var(--ink);
+    color: var(--on-ink);
+    padding: clamp(80px, 12vw, 160px) 0;
+  }
+  .eyebrow {
+    color: #9a9a9a;
+  }
+  h2 {
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
   .lead {
-    margin: 0 0 24px;
-    max-width: 60ch;
+    margin-top: 28px;
+    max-width: 48ch;
+    color: #b5b5b5;
+    font-size: 1.1rem;
   }
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 10px;
-  }
-  li {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 12px;
+  .email {
+    display: inline-flex;
+    gap: 14px;
+    margin-top: clamp(40px, 5vw, 64px);
+    font-size: clamp(1.25rem, 3.5vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 6px;
     overflow-wrap: anywhere;
   }
-  span {
-    color: var(--muted);
+  .email span {
+    transition: transform 0.2s;
+  }
+  .email:hover span {
+    transform: translateX(6px);
+  }
+  .links {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    padding: 0;
+    margin: 40px 0 0;
+  }
+  .links a {
+    color: #b5b5b5;
+    text-decoration: none;
+  }
+  .links a:hover {
+    color: var(--on-ink);
   }
 </style>

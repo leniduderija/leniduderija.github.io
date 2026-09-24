@@ -1,112 +1,414 @@
 ---
-import { experience } from '../data/experience';
+import { jobs } from '../data/experience';
 import { profile } from '../data/profile';
+import { formatDuration, formatMonth, monthsBetween, toTime } from '../lib/dates';
 
-const fmt = (ym?: string) => {
-  if (!ym) return 'Present';
-  const [y, m] = ym.split('-').map(Number);
-  return new Date(y, m - 1).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
-};
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+// Career overview bar: each job positioned proportionally from the first start to today.
+const from = Math.min(...jobs.map((j) => toTime(j.start)));
+const to = Date.now();
+const pct = (t: number) => ((t - from) / (to - from)) * 100;
+
+const chronological = [...jobs].sort((a, b) => toTime(a.start) - toTime(b.start));
+const segments = chronological.map((j, i) => {
+  const overlaps = chronological.slice(0, i).some((p) => toTime(p.end) > toTime(j.start));
+  const left = pct(toTime(j.start));
+  const width = pct(toTime(j.end)) - left;
+  return { job: j, left, width, lane: overlaps ? 1 : 0 };
+});
+
+const firstYear = new Date(from).getFullYear();
+const ticks = Array.from({ length: new Date().getFullYear() - firstYear }, (_, i) => firstYear + i + 1).map(
+  (y) => ({ year: y, left: pct(new Date(y, 0).getTime()) }),
+);
 ---
 
-<section id="experience">
-  <div class="head">
-    <h2>Experience</h2>
-    <a href={profile.cvUrl} download>Download CV (PDF)</a>
+<section id="experience" class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">02 — Experience</p>
+        <h2 class="section-title">Career timeline</h2>
+      </div>
+      <a class="button outline" href={profile.cvUrl} download>Download full CV (PDF) <span aria-hidden="true">↓</span></a>
+    </div>
+
+    <div class="overview" aria-hidden="true">
+      <div class="bar">
+        {
+          segments.map((s) => (
+            <a
+              href={`#${slug(s.job.org)}`}
+              class:list={['seg', { current: !s.job.end, lane2: s.lane }]}
+              style={`left:${s.left}%;width:${s.width}%`}
+              title={`${s.job.org} · ${formatMonth(s.job.start)} – ${formatMonth(s.job.end)}`}
+              tabindex="-1"
+            >
+              {s.width > 5 && !s.lane && <span>{s.job.short}</span>}
+            </a>
+          ))
+        }
+      </div>
+      <div class="ticks">
+        {ticks.map((t) => <span style={`left:${t.left}%`}>{t.year}</span>)}
+      </div>
+    </div>
+
+    <ol class="timeline">
+      {
+        jobs.map((j) => (
+          <li id={slug(j.org)} class:list={['item', { current: !j.end }]}>
+            <div class="meta">
+              <p class="dates">
+                <time datetime={j.start}>{formatMonth(j.start)}</time>
+                <span aria-hidden="true"> — </span>
+                {j.end ? <time datetime={j.end}>{formatMonth(j.end)}</time> : <span>Present</span>}
+              </p>
+              <p class="duration">
+                {formatDuration(monthsBetween(j.start, j.end))}
+                {!j.end && <span class="now">Now</span>}
+              </p>
+            </div>
+
+            <div class="content">
+              <h3>{j.title}</h3>
+              <p class="org">
+                {j.org}
+                {j.location && <span> · {j.location}</span>}
+              </p>
+              <p class="summary">{j.summary}</p>
+
+              {j.highlights && (
+                <ul class="highlights">
+                  {j.highlights.map((h) => (
+                    <li>{h}</li>
+                  ))}
+                </ul>
+              )}
+
+              {j.tech && (
+                <ul class="chips">
+                  {j.tech.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              )}
+
+              {j.projects && (
+                <div class="projects">
+                  <p class="projects-label">
+                    Projects <span>{j.projects.length}</span>
+                  </p>
+                  <div class="cards">
+                    {j.projects.map((p) => (
+                      <article class="card">
+                        <h4>
+                          {p.url ? (
+                            <a href={p.url} target="_blank" rel="noopener">
+                              {p.name} <span aria-hidden="true">↗</span>
+                            </a>
+                          ) : (
+                            p.name
+                          )}
+                        </h4>
+                        <p>{p.summary}</p>
+                        <ul class="chips small">
+                          {p.tech.map((t) => (
+                            <li>{t}</li>
+                          ))}
+                        </ul>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
   </div>
-  <ol class="timeline">
-    {
-      experience.map((e) => (
-        <li class={e.kind}>
-          <span class="dot" aria-hidden="true" />
-          <p class="dates">
-            <time datetime={e.start}>{fmt(e.start)}</time> – {e.end ? <time datetime={e.end}>{fmt(e.end)}</time> : 'Present'}
-          </p>
-          <h3>{e.title}</h3>
-          <p class="org">{e.org}</p>
-          <p class="desc">{e.description}</p>
-          {e.tags && (
-            <ul class="tags">
-              {e.tags.map((t) => <li>{t}</li>)}
-            </ul>
-          )}
-        </li>
-      ))
-    }
-  </ol>
 </section>
 
 <style>
-  .head {
+  /* Overview bar */
+  .overview {
+    margin-bottom: clamp(56px, 7vw, 96px);
+  }
+  .bar {
+    position: relative;
+    height: 58px;
+  }
+  .seg {
+    position: absolute;
+    top: 0;
+    height: 40px;
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 16px;
-    margin-bottom: 28px;
+    align-items: center;
+    padding: 0 10px;
+    background: #efefee;
+    border: 1px solid var(--bg);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
   }
-  .head h2 {
-    margin: 0;
+  .seg:nth-child(even) {
+    background: #dededc;
   }
-  .head a {
-    font-size: 0.9rem;
+  .seg.current,
+  .seg:hover {
+    background: var(--ink);
+    color: var(--on-ink);
   }
+  .seg.lane2 {
+    top: 44px;
+    height: 12px;
+    padding: 0;
+    background: #c9c9c7;
+  }
+  .ticks {
+    position: relative;
+    height: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .ticks span {
+    position: absolute;
+    top: 6px;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  @media (max-width: 720px) {
+    .ticks span:nth-child(even) {
+      display: none;
+    }
+    .seg span {
+      display: none;
+    }
+  }
+
+  /* Timeline */
   .timeline {
     list-style: none;
     margin: 0;
-    padding: 0 0 0 24px;
-    border-left: 2px solid var(--border);
+    padding: 0;
   }
-  .timeline > li {
-    position: relative;
-    padding-bottom: 36px;
+  .item {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 0 clamp(24px, 4vw, 64px);
   }
-  .timeline > li:last-child {
-    padding-bottom: 0;
-  }
-  .dot {
-    position: absolute;
-    left: -32px;
-    top: 6px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 3px solid var(--accent);
-  }
-  .education .dot {
-    border-color: var(--muted);
+  .meta {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    padding-top: 4px;
   }
   .dates {
-    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .duration {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
     font-size: 0.85rem;
     color: var(--muted);
-    font-variant-numeric: tabular-nums;
   }
+  .now {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--on-ink);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .now::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .content {
+    position: relative;
+    padding: 0 0 clamp(56px, 6vw, 88px) 40px;
+    border-left: 1px solid var(--border);
+  }
+  .item:last-child .content {
+    padding-bottom: 0;
+  }
+  .content::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 6px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--ink);
+  }
+  .current .content::before {
+    background: var(--ink);
+    box-shadow: 0 0 0 5px rgb(10 10 10 / 0.1);
+  }
+
   h3 {
-    font-size: 1.15rem;
-    margin-top: 4px;
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    font-weight: 700;
   }
   .org {
-    margin: 2px 0 8px;
-    color: var(--accent);
-    font-weight: 500;
+    margin-top: 6px;
+    font-weight: 600;
   }
-  .desc {
-    margin: 0;
+  .org span {
+    font-weight: 400;
+    color: var(--muted);
   }
-  .tags {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+  .summary {
+    margin-top: 16px;
+    max-width: 70ch;
+    color: #333;
+  }
+  .highlights {
+    margin: 16px 0 0;
     padding: 0;
-    margin: 12px 0 0;
+    list-style: none;
+    max-width: 75ch;
   }
-  .tags li {
-    font-size: 0.8rem;
-    padding: 2px 10px;
+  .highlights li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 6px;
+    color: #333;
+  }
+  .highlights li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 8px;
+    height: 1px;
+    background: var(--ink);
+  }
+  .content > .chips {
+    margin-top: 20px;
+  }
+
+  .projects {
+    margin-top: 32px;
+  }
+  .projects-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .projects-label span {
+    padding: 2px 7px;
     border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent);
+    border: 1px solid var(--border);
+    line-height: 1.2;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 12px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -16px rgb(0 0 0 / 0.25);
+  }
+  h4 {
+    margin: 0;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  h4 a {
+    text-decoration: none;
+  }
+  h4 a:hover {
+    text-decoration: underline;
+  }
+  .card p {
+    font-size: 0.92rem;
+    color: #444;
+    flex: 1;
+  }
+  .chips.small li {
+    font-size: 0.72rem;
+    padding: 5px 9px;
+  }
+
+  @media (max-width: 800px) {
+    .item {
+      grid-template-columns: 1fr;
+    }
+    .meta {
+      position: relative;
+      top: 0;
+      padding: 0 0 12px 32px;
+      border-left: 1px solid var(--border);
+    }
+    .content {
+      padding-left: 32px;
+    }
+    .content::before {
+      content: none;
+    }
+    .meta::before {
+      content: '';
+      position: absolute;
+      left: -7px;
+      top: 4px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--ink);
+    }
+    .current .meta::before {
+      background: var(--ink);
+      box-shadow: 0 0 0 5px rgb(10 10 10 / 0.1);
+    }
   }
 </style>
