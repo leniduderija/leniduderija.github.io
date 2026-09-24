@@ -13,7 +13,7 @@ export const skills: { group: string; items: string[] }[] = [
   },
   {
     group: 'Tooling & delivery',
-    items: ['Git', 'GitHub Actions', 'CI/CD', 'Docker', 'Jest', 'Storybook', 'AWS', 'Cursor'],
+    items: ['Git', 'GitHub Actions', 'CI/CD', 'Docker', 'Jest', 'Storybook', 'AWS', 'Cursor', 'Claude'],
   },
   {
     group: 'Also worked with',

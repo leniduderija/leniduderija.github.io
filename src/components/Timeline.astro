@@ -96,30 +96,49 @@ const ticks = Array.from({ length: new Date().getFullYear() - firstYear }, (_, i
               )}
 
               {j.projects && (
-                <div class="projects">
+                <div class="projects" data-projects>
                   <p class="projects-label">
                     Projects <span>{j.projects.length}</span>
                   </p>
-                  <div class="cards">
-                    {j.projects.map((p) => (
-                      <article class="card">
-                        <h4>
-                          {p.url ? (
-                            <a href={p.url} target="_blank" rel="noopener">
-                              {p.name} <span aria-hidden="true">↗</span>
-                            </a>
-                          ) : (
-                            p.name
-                          )}
-                        </h4>
-                        <p>{p.summary}</p>
-                        <ul class="chips small">
-                          {p.tech.map((t) => (
-                            <li>{t}</li>
-                          ))}
-                        </ul>
-                      </article>
-                    ))}
+                  <button
+                    type="button"
+                    class="projects-toggle"
+                    aria-expanded="false"
+                    aria-controls={`projects-${slug(j.org)}`}
+                  >
+                    <span class="toggle-text">
+                      Projects<span class="sr-only"> at {j.org}</span>
+                    </span>
+                    <span class="count" aria-hidden="true">{j.projects.length}</span>
+                    <span class="sr-only">({j.projects.length})</span>
+                    <span class="icon" aria-hidden="true" />
+                  </button>
+                  <div class="collapse" id={`projects-${slug(j.org)}`}>
+                    <div class="collapse-inner">
+                      <div class="cards">
+                        {j.projects.map((p) => (
+                          <article class="card">
+                            <h4>
+                              {p.url ? (
+                                <a href={p.url} target="_blank" rel="noopener">
+                                  {p.name}
+                                  <span class="sr-only"> (opens in a new tab)</span>
+                                  <span aria-hidden="true">↗</span>
+                                </a>
+                              ) : (
+                                p.name
+                              )}
+                            </h4>
+                            <p>{p.summary}</p>
+                            <ul class="chips small">
+                              {p.tech.map((t) => (
+                                <li>{t}</li>
+                              ))}
+                            </ul>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -130,6 +149,28 @@ const ticks = Array.from({ length: new Date().getFullYear() - firstYear }, (_, i
     </ol>
   </div>
 </section>
+
+<script>
+  const mobile = window.matchMedia('(max-width: 800px)');
+
+  const sync = (el: HTMLElement) => {
+    const open = el.classList.contains('open');
+    const button = el.querySelector<HTMLButtonElement>('.projects-toggle')!;
+    const panel = el.querySelector<HTMLElement>('.collapse')!;
+    button.setAttribute('aria-expanded', String(open));
+    panel.inert = mobile.matches && !open;
+  };
+
+  const groups = document.querySelectorAll<HTMLElement>('[data-projects]');
+  groups.forEach((el) => {
+    el.querySelector('.projects-toggle')!.addEventListener('click', () => {
+      el.classList.toggle('open');
+      sync(el);
+    });
+    sync(el);
+  });
+  mobile.addEventListener('change', () => groups.forEach(sync));
+</script>
 
 <style>
   /* Overview bar */
@@ -338,6 +379,71 @@ const ticks = Array.from({ length: new Date().getFullYear() - firstYear }, (_, i
     border: 1px solid var(--border);
     line-height: 1.2;
   }
+
+  .projects-toggle {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: none;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .projects-toggle .count {
+    padding: 2px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    line-height: 1.2;
+    color: var(--muted);
+  }
+  .projects-toggle .icon {
+    position: relative;
+    margin-left: auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+    transition: background 0.3s, transform 0.4s ease;
+  }
+  .projects-toggle .icon::before,
+  .projects-toggle .icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 1.5px;
+    background: var(--ink);
+    transform: translate(-50%, -50%);
+    transition: background 0.3s;
+  }
+  .projects-toggle .icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  .open .projects-toggle .icon {
+    background: var(--ink);
+    transform: rotate(135deg);
+  }
+  .open .projects-toggle .icon::before,
+  .open .projects-toggle .icon::after {
+    background: var(--on-ink);
+  }
+  .collapse {
+    display: grid;
+    grid-template-rows: 1fr;
+  }
+  .collapse-inner {
+    min-height: 0;
+  }
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
@@ -380,6 +486,32 @@ const ticks = Array.from({ length: new Date().getFullYear() - firstYear }, (_, i
   }
 
   @media (max-width: 800px) {
+    :global(.js) .projects-label {
+      display: none;
+    }
+    :global(.js) .projects-toggle {
+      display: flex;
+    }
+    :global(.js) .collapse {
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.4s ease;
+    }
+    :global(.js) .collapse-inner {
+      overflow: hidden;
+    }
+    :global(.js) .collapse .cards {
+      padding-top: 12px;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.3s ease, transform 0.4s ease;
+    }
+    :global(.js) .open .collapse {
+      grid-template-rows: 1fr;
+    }
+    :global(.js) .open .collapse .cards {
+      opacity: 1;
+      transform: none;
+    }
     .item {
       grid-template-columns: 1fr;
     }

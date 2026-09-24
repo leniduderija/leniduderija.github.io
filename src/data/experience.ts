@@ -27,6 +27,12 @@ export interface Education {
   end: string;
 }
 
+export interface Course {
+  name: string;
+  provider?: string;
+  year?: string;
+}
+
 export const jobs: Job[] = [
   {
     title: 'React Developer',
@@ -187,4 +193,8 @@ export const education: Education[] = [
     start: '2008',
     end: '2013',
   },
+];
+
+export const courses: Course[] = [
+  { name: 'AI upskilling: building RAG chatbots' },
 ];

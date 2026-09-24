@@ -1,0 +1,22 @@
+---
+import { logos, logoVariant, type LogoVariant } from '../lib/logo';
+
+interface Props {
+  size?: number;
+  variant?: LogoVariant;
+  class?: string;
+}
+
+const { size = 28, variant = logoVariant, class: className } = Astro.props;
+const logo = logos[variant];
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox={logo.viewBox}
+  aria-hidden="true"
+  focusable="false"
+  set:html={logo.mark('currentColor')}
+/>

@@ -9,10 +9,18 @@ const { email, linkedin } = profile.contact;
     <p class="eyebrow">04 — Contact</p>
     <h2>Let’s build something<br />together.</h2>
     <p class="lead">Open to new opportunities and interesting conversations. The best way to reach me is email.</p>
-    <a class="email" href={`mailto:${email}`}>{email} <span aria-hidden="true">→</span></a>
+    <a class="email" href={`mailto:${email}`}><span class="sr-only">Email </span>{email} <span aria-hidden="true">→</span></a>
     <ul class="links">
-      <li><a href={linkedin} target="_blank" rel="noopener">LinkedIn ↗</a></li>
-      <li><a href={profile.cvUrl} download>Download CV ↓</a></li>
+      <li>
+        <a href={linkedin} target="_blank" rel="noopener">
+          LinkedIn<span class="sr-only"> (opens in a new tab)</span> <span aria-hidden="true">↗</span>
+        </a>
+      </li>
+      <li>
+        <a href={profile.cvUrl} download>
+          Download CV<span class="sr-only"> (PDF)</span> <span aria-hidden="true">↓</span>
+        </a>
+      </li>
     </ul>
   </div>
 </section>
@@ -65,8 +73,13 @@ const { email, linkedin } = profile.contact;
     margin: 40px 0 0;
   }
   .links a {
+    display: inline-block;
+    padding: 6px 0;
     color: #b5b5b5;
     text-decoration: none;
+  }
+  .contact :focus-visible {
+    outline-color: var(--on-ink);
   }
   .links a:hover {
     color: var(--on-ink);

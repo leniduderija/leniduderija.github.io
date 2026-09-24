@@ -1,5 +1,6 @@
 ---
 import { profile } from '../data/profile';
+import Logo from './Logo.astro';
 
 const links = [
   { href: '#about', label: 'About' },
@@ -11,10 +12,14 @@ const links = [
 
 <header>
   <div class="container inner">
-    <a href="/" class="brand">{profile.name}</a>
+    <a href="/" class="brand" aria-label={`${profile.name} — home`}>
+      <Logo size={30} />
+    </a>
     <nav aria-label="Main">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
-      <a class="cv" href={profile.cvUrl} download>CV ↓</a>
+      <a class="cv" href={profile.cvUrl} download>
+        CV<span class="sr-only"> download (PDF)</span> <span aria-hidden="true">↓</span>
+      </a>
     </nav>
   </div>
 </header>
@@ -36,10 +41,11 @@ const links = [
     height: 64px;
   }
   .brand {
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    text-decoration: none;
-    white-space: nowrap;
+    display: inline-flex;
+    transition: opacity 0.15s;
+  }
+  .brand:hover {
+    opacity: 0.7;
   }
   nav {
     display: flex;
@@ -47,8 +53,10 @@ const links = [
     gap: clamp(14px, 2.5vw, 32px);
   }
   nav a {
+    padding: 8px 0;
     color: var(--muted);
     text-decoration: none;
+    white-space: nowrap;
     font-size: 0.93rem;
     transition: color 0.15s;
   }
@@ -66,12 +74,15 @@ const links = [
     color: var(--on-ink);
     opacity: 0.85;
   }
-  @media (max-width: 640px) {
-    .brand {
-      display: none;
+  @media (max-width: 420px) {
+    nav {
+      gap: 10px;
     }
-    .inner {
-      justify-content: center;
+    nav a {
+      font-size: 0.85rem;
+    }
+    nav .cv {
+      padding: 6px 12px;
     }
   }
 </style>
