@@ -1,0 +1,51 @@
+---
+import { skills } from '../data/skills';
+---
+
+<section id="skills">
+  <h2>Technologies</h2>
+  <div class="grid">
+    {
+      skills.map((s) => (
+        <div class="group">
+          <h3>{s.group}</h3>
+          <ul>
+            {s.items.map((i) => <li>{i}</li>)}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    font-size: 0.85rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+  }
+</style>

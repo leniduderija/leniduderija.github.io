@@ -1,0 +1,112 @@
+---
+import { experience } from '../data/experience';
+import { profile } from '../data/profile';
+
+const fmt = (ym?: string) => {
+  if (!ym) return 'Present';
+  const [y, m] = ym.split('-').map(Number);
+  return new Date(y, m - 1).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+};
+---
+
+<section id="experience">
+  <div class="head">
+    <h2>Experience</h2>
+    <a href={profile.cvUrl} download>Download CV (PDF)</a>
+  </div>
+  <ol class="timeline">
+    {
+      experience.map((e) => (
+        <li class={e.kind}>
+          <span class="dot" aria-hidden="true" />
+          <p class="dates">
+            <time datetime={e.start}>{fmt(e.start)}</time> – {e.end ? <time datetime={e.end}>{fmt(e.end)}</time> : 'Present'}
+          </p>
+          <h3>{e.title}</h3>
+          <p class="org">{e.org}</p>
+          <p class="desc">{e.description}</p>
+          {e.tags && (
+            <ul class="tags">
+              {e.tags.map((t) => <li>{t}</li>)}
+            </ul>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .head h2 {
+    margin: 0;
+  }
+  .head a {
+    font-size: 0.9rem;
+  }
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 24px;
+    border-left: 2px solid var(--border);
+  }
+  .timeline > li {
+    position: relative;
+    padding-bottom: 36px;
+  }
+  .timeline > li:last-child {
+    padding-bottom: 0;
+  }
+  .dot {
+    position: absolute;
+    left: -32px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3px solid var(--accent);
+  }
+  .education .dot {
+    border-color: var(--muted);
+  }
+  .dates {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  h3 {
+    font-size: 1.15rem;
+    margin-top: 4px;
+  }
+  .org {
+    margin: 2px 0 8px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .desc {
+    margin: 0;
+  }
+  .tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0;
+    margin: 12px 0 0;
+  }
+  .tags li {
+    font-size: 0.8rem;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+</style>

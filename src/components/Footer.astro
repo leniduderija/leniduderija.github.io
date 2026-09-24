@@ -1,0 +1,16 @@
+---
+import { profile } from '../data/profile';
+---
+
+<footer>
+  <div class="container">© {new Date().getFullYear()} {profile.name}</div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+</style>

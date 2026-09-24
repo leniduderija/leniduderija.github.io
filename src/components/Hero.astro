@@ -1,0 +1,40 @@
+---
+import { profile } from '../data/profile';
+---
+
+<div id="about" class="hero">
+  <p class="eyebrow">{profile.role} · {profile.location}</p>
+  <h1>Hi, I'm {profile.name}.</h1>
+  <p class="summary">{profile.summary}</p>
+  <div class="actions">
+    <a class="button" href={profile.cvUrl} download>Download CV</a>
+    <a class="button secondary" href="#contact">Get in touch</a>
+  </div>
+</div>
+
+<style>
+  .hero {
+    padding: 88px 0 64px;
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 0 0 12px;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    letter-spacing: -0.02em;
+  }
+  .summary {
+    color: var(--muted);
+    font-size: 1.15rem;
+    max-width: 60ch;
+    margin: 20px 0 32px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

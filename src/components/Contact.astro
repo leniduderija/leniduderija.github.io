@@ -1,0 +1,50 @@
+---
+import { profile } from '../data/profile';
+
+const { email, github, linkedin } = profile.contact;
+const links = [
+  { label: 'Email', value: email, href: `mailto:${email}` },
+  { label: 'GitHub', value: github.replace('https://', ''), href: github },
+  { label: 'LinkedIn', value: linkedin.replace('https://www.', ''), href: linkedin },
+];
+---
+
+<section id="contact">
+  <h2>Contact</h2>
+  <p class="lead">Open to new opportunities and interesting conversations. The best way to reach me is email.</p>
+  <ul>
+    {
+      links.map((l) => (
+        <li>
+          <span>{l.label}</span>
+          <a href={l.href} rel="noopener" target={l.href.startsWith('http') ? '_blank' : undefined}>
+            {l.value}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .lead {
+    margin: 0 0 24px;
+    max-width: 60ch;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  li {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    overflow-wrap: anywhere;
+  }
+  span {
+    color: var(--muted);
+  }
+</style>
