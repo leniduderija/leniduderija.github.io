@@ -1,5 +1,5 @@
 ---
-// Printable CV built from the same data as the site. Print → "Save as PDF" (A4).
+// Printable CV built from the same data as the site; scripts/build-cv-pdf.mjs renders it to PDF.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Logo from '../components/Logo.astro';
 import { profile } from '../data/profile';
@@ -16,8 +16,9 @@ const range = (start: string, end?: string) => `${formatMonth(start)} – ${form
 <BaseLayout title={`${profile.name} CV`} description={profile.cv.summary} noindex>
   <nav class="toolbar" aria-label="CV actions">
     <a href="/">← Back to site</a>
-    <p>Print → “Save as PDF”, A4, default margins.</p>
-    <button type="button" id="print">Download PDF</button>
+    <a class="download" href={profile.cvUrl} download={profile.cvFileName}>
+      Download PDF <span aria-hidden="true">↓</span>
+    </a>
   </nav>
 
   <main id="main" class="sheet">
@@ -134,10 +135,6 @@ const range = (start: string, end?: string) => `${formatMonth(start)} – ${form
   </main>
 </BaseLayout>
 
-<script>
-  document.getElementById('print')?.addEventListener('click', () => window.print());
-</script>
-
 <style>
   :global(body) {
     background: #eeeeec;
@@ -160,23 +157,12 @@ const range = (start: string, end?: string) => `${formatMonth(start)} – ${form
     text-decoration: none;
     padding: 6px 0;
   }
-  .toolbar p {
-    color: var(--muted);
-  }
-  .toolbar button {
+  .toolbar .download {
     padding: 10px 18px;
-    border: 0;
     border-radius: 999px;
     background: var(--ink);
     color: var(--on-ink);
-    font: inherit;
     font-weight: 600;
-    cursor: pointer;
-  }
-  @media (max-width: 640px) {
-    .toolbar p {
-      display: none;
-    }
   }
 
   /* The sheet mirrors an A4 page on screen. */

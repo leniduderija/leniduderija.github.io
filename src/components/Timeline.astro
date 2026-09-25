@@ -31,7 +31,12 @@ const ticks = Array.from({ length: new Date().getFullYear() - firstYear }, (_, i
         <p class="eyebrow">02 — Experience</p>
         <h2 class="section-title">Career timeline</h2>
       </div>
-      <a class="button outline" href={profile.cvUrl} download={profile.cvFileName}>Download full CV (PDF) <span aria-hidden="true">↓</span></a>
+      <div class="cv-actions">
+        <a class="button" href="/cv/">View full CV <span aria-hidden="true">→</span></a>
+        <a class="button outline" href={profile.cvUrl} download={profile.cvFileName}>
+          PDF<span class="sr-only"> CV download</span> <span aria-hidden="true">↓</span>
+        </a>
+      </div>
     </div>
 
     <div class="overview" aria-hidden="true">
@@ -173,6 +178,12 @@ const ticks = Array.from({ length: new Date().getFullYear() - firstYear }, (_, i
 </script>
 
 <style>
+  .cv-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
   /* Overview bar */
   .overview {
     margin-bottom: clamp(56px, 7vw, 96px);
