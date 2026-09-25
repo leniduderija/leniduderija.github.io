@@ -6,7 +6,7 @@ import { skills } from '../data/skills';
   <div class="container">
     <div class="section-head">
       <div>
-        <p class="eyebrow">03 — Skills</p>
+        <p class="eyebrow">04 — Skills</p>
         <h2 class="section-title">Technologies</h2>
       </div>
     </div>
@@ -31,15 +31,12 @@ import { skills } from '../data/skills';
 <style>
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-    border-top: 1px solid var(--ink);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 0 32px;
   }
   .group {
-    padding: 24px 24px 32px 0;
-  }
-  .group + .group {
-    padding-left: 24px;
-    border-left: 1px solid var(--border);
+    padding: 20px 0 36px;
+    border-top: 1px solid var(--ink);
   }
   .index {
     font-family: var(--font-mono);
@@ -49,12 +46,5 @@ import { skills } from '../data/skills';
   h3 {
     font-size: 1.2rem;
     margin: 8px 0 18px;
-  }
-  @media (max-width: 560px) {
-    .group + .group {
-      padding-left: 0;
-      border-left: 0;
-      border-top: 1px solid var(--border);
-    }
   }
 </style>

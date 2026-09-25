@@ -16,7 +16,8 @@ npm run preview  # serve dist/
 - `src/data/profile.ts` — name, role, intro, contact links
 - `src/data/experience.ts` — CV timeline (newest first)
 - `src/data/skills.ts` — technologies by group
-- `public/cv.pdf` — downloadable CV (replace the placeholder)
+- `public/Leni-Duderija-CV.pdf` — downloadable CV
+- `/cv` — printable CV generated from the same data (Print → Save as PDF)
 
 ## Deploy
 

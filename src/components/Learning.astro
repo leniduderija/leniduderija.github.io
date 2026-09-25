@@ -1,0 +1,102 @@
+---
+import { credentials, learningIntro } from '../data/learning';
+import { formatMonth } from '../lib/dates';
+---
+
+<section id="learning" class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">03 — Learning</p>
+        <h2 class="section-title">Certifications</h2>
+      </div>
+      <p class="intro">{learningIntro}</p>
+    </div>
+    <ul class="grid">
+      {
+        credentials.map((c) => (
+          <li class="card">
+            <p class="provider">{c.provider}</p>
+            <h3>{c.name}</h3>
+            <div class="foot">
+              <time datetime={c.date}>{formatMonth(c.date)}</time>
+              {c.url && (
+                <a href={c.url} target="_blank" rel="noopener">
+                  Verify<span class="sr-only"> {c.name} credential (opens in a new tab)</span>{' '}
+                  <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .intro {
+    max-width: 52ch;
+    color: var(--muted);
+  }
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 12px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition:
+      border-color 0.2s,
+      transform 0.2s;
+  }
+  .card:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
+  .provider {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h3 {
+    font-size: 1.15rem;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    flex: 1;
+  }
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  time {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .foot a {
+    padding: 4px 0;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .foot a:hover {
+    text-decoration: underline;
+  }
+</style>

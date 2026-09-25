@@ -1,22 +1,34 @@
 export const skills: { group: string; items: string[] }[] = [
   {
-    group: 'Core',
-    items: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'Redux', 'Redux Toolkit', 'HTML5', 'CSS3'],
+    group: 'Frontend',
+    items: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'Redux', 'Redux Toolkit', 'HTML5', 'CSS3'],
   },
   {
-    group: 'UI & styling',
-    items: ['Tailwind CSS', 'shadcn/ui', 'Material UI', 'Chakra UI', 'Sass', 'Responsive design'],
+    group: 'UI',
+    items: ['Tailwind CSS', 'shadcn/ui', 'Material UI', 'Chakra UI', 'Storybook', 'AG Grid', 'Formik', 'Sass'],
   },
   {
-    group: 'Backend & data',
-    items: ['Node.js', 'Koa', 'Prisma', 'GraphQL', 'REST', 'Sanity', 'Headless WordPress'],
+    group: 'Backend & APIs',
+    items: ['Node.js', 'GraphQL', 'REST APIs', 'Koa', 'Prisma', 'Sanity CMS', 'Headless WordPress', 'WebSockets'],
   },
   {
-    group: 'Tooling & delivery',
-    items: ['Git', 'GitHub Actions', 'CI/CD', 'Docker', 'Jest', 'Storybook', 'AWS', 'Cursor', 'Claude'],
+    group: 'Architecture',
+    items: ['Web app architecture', 'SSR', 'Legacy modernisation', 'Code migration', 'API integration', 'Responsive web'],
+  },
+  {
+    group: 'AI & dev tools',
+    items: ['Claude', 'Cursor', 'AI-assisted workflows', 'Prompt engineering', 'RAG / LLM apps'],
+  },
+  {
+    group: 'Testing & DevOps',
+    items: ['Jest', 'Docker', 'GitHub Actions', 'CI/CD', 'AWS', 'Git'],
+  },
+  {
+    group: 'Ways of working',
+    items: ['Technical ownership', 'Code reviews', 'Agile'],
   },
   {
     group: 'Also worked with',
-    items: ['Angular', 'AngularJS', 'React Native', 'Ember.js', 'jQuery', 'OutSystems', 'SEO'],
+    items: ['Angular', 'AngularJS', 'React Native', 'Ember.js', 'jQuery', 'ASP.NET', 'OutSystems'],
   },
 ];

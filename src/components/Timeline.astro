@@ -31,7 +31,7 @@ const ticks = Array.from({ length: new Date().getFullYear() - firstYear }, (_, i
         <p class="eyebrow">02 — Experience</p>
         <h2 class="section-title">Career timeline</h2>
       </div>
-      <a class="button outline" href={profile.cvUrl} download>Download full CV (PDF) <span aria-hidden="true">↓</span></a>
+      <a class="button outline" href={profile.cvUrl} download={profile.cvFileName}>Download full CV (PDF) <span aria-hidden="true">↓</span></a>
     </div>
 
     <div class="overview" aria-hidden="true">

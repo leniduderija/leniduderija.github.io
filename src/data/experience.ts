@@ -27,32 +27,27 @@ export interface Education {
   end: string;
 }
 
-export interface Course {
-  name: string;
-  provider?: string;
-  year?: string;
-}
 
 export const jobs: Job[] = [
   {
-    title: 'React Developer',
+    title: 'Senior React Developer',
     org: 'Q Agency',
     short: 'Q Agency',
     location: 'Zagreb',
     start: '2024-04',
-    summary: 'Leading frontend development on AI-driven and high-traffic products.',
+    summary: 'Leading frontend development for modern web applications, including AI-driven products and high-traffic streaming platforms.',
     highlights: [
-      'Led frontend development of a sophisticated AI-driven platform.',
-      'Engineered an SSR frontend for a high-traffic streaming platform with Next.js.',
-      'Integrated GCP Identity Platform and Sanity CMS.',
-      'Researched the company’s AI direction; wrote blog posts and education materials on AI tools for developers.',
-      'Took part in all Agile ceremonies and ran regular code reviews.',
+      'Built server-side rendered applications with Next.js, React and TypeScript.',
+      'Developed an AI-powered recruitment platform made of multiple Next.js applications.',
+      'Integrated third-party services including GCP Identity Platform and Sanity CMS.',
+      'Contribute to architecture, technical decision-making, code reviews and Agile ceremonies.',
+      'Early adopter of AI-assisted development; contributed to internal AI research, education and upskilling.',
     ],
     projects: [
       {
-        name: 'AI-Driven Platform',
+        name: 'AI-Driven Recruitment Platform',
         summary:
-          'Multi-tenant AI-powered applicant tracking system built as a modular suite of Next.js apps, including a system admin for tenants, users and workspaces. Mobile-first, Dockerised, covered by Jest tests, developed with an AI-assisted Cursor workflow.',
+          'Multi-tenant recruitment platform with separate recruiter and candidate apps: administration, tenant workspaces, recruitment workflows, candidate profiles, interviews and AI-assisted evaluation. Dockerised, covered by Jest tests, built with an AI-assisted Cursor workflow.',
         tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'shadcn/ui', 'Jest', 'Docker', 'Cursor'],
       },
       {
@@ -71,12 +66,22 @@ export const jobs: Job[] = [
     start: '2019-06',
     end: '2024-04',
     summary: 'Led frontend development for major client projects, owning technical direction and implementation.',
+    highlights: [
+      'New application development, legacy modernisation and framework migrations.',
+      'Collaborated with distributed teams and clients to deliver maintainable, responsive web apps.',
+    ],
     projects: [
       {
         name: 'Bevi',
         summary:
           'Portal for managing smart water dispensers. Led the frontend, migrated AngularJS to React + TypeScript, and built a real-time touchless-pour app over WebSockets.',
-        tech: ['React', 'TypeScript', 'Redux', 'Redux Saga', 'Formik', 'Material UI', 'Ag-Grid', 'AWS Lambda'],
+        tech: ['React', 'TypeScript', 'Redux', 'Redux Saga', 'Formik', 'Material UI', 'AG Grid', 'AWS Lambda'],
+      },
+      {
+        name: 'Performology',
+        summary:
+          'Modernised a legacy insurance application by introducing React alongside the existing ASP.NET and jQuery codebase. Built CRM features: dashboards, lead tracking, sales management and compensation tracking.',
+        tech: ['React', 'C#', 'ASP.NET', 'jQuery', 'Bootstrap'],
       },
       {
         name: 'Yacht & Skipper',
@@ -148,7 +153,7 @@ export const jobs: Job[] = [
       {
         name: 'Linnegatan7',
         summary: 'Booking app for an exclusive private gym, rewritten from AngularJS to Angular 2.',
-        tech: ['AngularJS', 'Angular'],
+        tech: ['AngularJS', 'Angular', 'Ember.js'],
       },
     ],
   },
@@ -195,6 +200,3 @@ export const education: Education[] = [
   },
 ];
 
-export const courses: Course[] = [
-  { name: 'AI upskilling: building RAG chatbots' },
-];

@@ -6,7 +6,7 @@ const { email, linkedin } = profile.contact;
 
 <section id="contact" class="contact">
   <div class="container">
-    <p class="eyebrow">04 — Contact</p>
+    <p class="eyebrow">05 — Contact</p>
     <h2>Let’s build something<br />together.</h2>
     <p class="lead">Open to new opportunities and interesting conversations. The best way to reach me is email.</p>
     <a class="email" href={`mailto:${email}`}><span class="sr-only">Email </span>{email} <span aria-hidden="true">→</span></a>
@@ -17,7 +17,7 @@ const { email, linkedin } = profile.contact;
         </a>
       </li>
       <li>
-        <a href={profile.cvUrl} download>
+        <a href={profile.cvUrl} download={profile.cvFileName}>
           Download CV<span class="sr-only"> (PDF)</span> <span aria-hidden="true">↓</span>
         </a>
       </li>

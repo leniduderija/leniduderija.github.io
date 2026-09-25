@@ -17,7 +17,7 @@ const links = [
     </a>
     <nav aria-label="Main">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
-      <a class="cv" href={profile.cvUrl} download>
+      <a class="cv" href={profile.cvUrl} download={profile.cvFileName}>
         CV<span class="sr-only"> download (PDF)</span> <span aria-hidden="true">↓</span>
       </a>
     </nav>

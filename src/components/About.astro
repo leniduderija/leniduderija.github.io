@@ -1,6 +1,6 @@
 ---
 import { profile } from '../data/profile';
-import { courses, education } from '../data/experience';
+import { education } from '../data/experience';
 ---
 
 <section id="about" class="section">
@@ -21,17 +21,6 @@ import { courses, education } from '../data/experience';
                 <span>
                   {e.school}, {e.start}–{e.end}
                 </span>
-              </p>
-            ))
-          }
-        </div>
-        <div>
-          <h3>Courses</h3>
-          {
-            courses.map((c) => (
-              <p>
-                {c.name}
-                {(c.provider || c.year) && <span>{[c.provider, c.year].filter(Boolean).join(', ')}</span>}
               </p>
             ))
           }
@@ -72,7 +61,7 @@ import { courses, education } from '../data/experience';
   }
   .facts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
     gap: 32px;
     margin-top: clamp(40px, 5vw, 64px);
     padding-top: 32px;
